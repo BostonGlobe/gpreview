@@ -8,8 +8,9 @@ const replace = require('gulp-replace')
 const fs = require('fs-extra')
 const url = require('url')
 const proxy = require('proxy-middleware')
-const glob = require('glob')
+const globby = require('globby')
 const path = require('path')
+const shell = require('shelljs')
 
 const argv = require('yargs')
 	.usage('Usage: $0 <command>')
@@ -38,11 +39,20 @@ gulp.task('default', function(done) {
 // Copy files from process.cwd()/ai2html-output to __dirname.
 gulp.task('copy', function(done) {
 
-	log('Copying files.')
+	log('Copying ai2html-output html.')
 
-	fs.copySync(
-		path.join(process.cwd(), 'ai2html-output'),
-		path.join(__dirname, 'temp/ai2html-output')
+	// If __dirname/temp doesn't exist,
+	if (!shell.test('-e', path.join(__dirname, 'temp'))) {
+
+		// create it.
+		shell.mkdir(path.join(__dirname, 'temp'))
+
+	}
+
+	// Copy ai2html-output contents over.
+	shell.cp(
+		path.join(process.cwd(), 'ai2html-output/*.*'),
+		path.join(__dirname, 'temp')
 	)
 
 	done()
@@ -50,18 +60,22 @@ gulp.task('copy', function(done) {
 })
 
 // Inject ai2html-output/*.html content into index.html.
-gulp.task('html', function() {
+gulp.task('html', function(done) {
 
 	log('Building html.')
 
-	const files = glob.sync(
-		path.join(__dirname, 'temp/ai2html-output/*.html'))
+	const files = globby.sync([
+			path.join(__dirname, 'temp/*.html'),
+			'!' + path.join(__dirname, 'temp/index.html')
+		])
 		.map(v => fs.readFileSync(v, 'utf8'))
 		.join('')
 
 	return gulp.src('index.html', { cwd: __dirname })
 		.pipe(replace('|||ai2html-output|||', files))
 		.pipe(gulp.dest('temp', { cwd: __dirname }))
+
+	done()
 
 })
 
@@ -82,7 +96,7 @@ gulp.task('watch', function() {
 	log('Watching files.')
 
 	gulp.watch('ai2html-output/*.*', ['copy'])
-	gulp.watch('temp/ai2html-output/*.*', { cwd: __dirname }, ['html-watch'])
+	gulp.watch('temp/*.*', { cwd: __dirname }, ['html-watch'])
 
 })
 

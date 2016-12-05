@@ -93,7 +93,7 @@
     <noscript>
    <link href="/css/hash/2b5ef09a5138c766a720d412190b48828c74e615/dist/icon-png-sprite.css" rel="stylesheet" type="text/css" media="all">
 </noscript>
-    <script src="/js/hash/05af47f4ea247350a8df5027a99d767868262517/dist/lib/jquery.js,dist/lib/magnific.js,dist/lib/lo-dash-custom-2.4.1.js,dist/globe-modal-meter.js,dist/globe-newsletter.js,dist/globe-topic-nav.js"></script>
+		<script src="/js/hash/05af47f4ea247350a8df5027a99d767868262517/dist/lib/jquery.js,dist/lib/lo-dash-custom-2.4.1.js,dist/globe-newsletter.js,dist/globe-topic-nav.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="/css/hash/2b5ef09a5138c766a720d412190b48828c74e615/dist/html5reset.css,dist/globe-globals.css,dist/globe-masthead.css,dist/globe-nav.css,dist/globe-nav-menus.css,dist/globe-main.css,dist/globe-footer.css,dist/modal-login.css,dist/globe-polldaddy.css,dist/article.css,dist/gallery.css,dist/shame.css,dist/state.css,dist/globe-topic-nav.css" />
     <link rel="stylesheet" type="text/css" media="print" href="/css/hash/2b5ef09a5138c766a720d412190b48828c74e615/dist/globe-print.css" />
     <!-- oas_sitepage:/business/homepage -->
@@ -600,82 +600,7 @@ METADATA FOR EMTAF
                         <p>&ldquo;I am definitely priced out of the metro Boston area,&rdquo; Gibbons said. She added, &ldquo;I&rsquo;ve just been stuck, stuck, stuck.&rdquo;</p>
                         <p>
                             <div class="multimedia-template">
-                                <style>
-                                    #globe-iframe-graphic--Boston-2011-2020-2016-06-22-BostonGlobecom-Business-Stories-1 {
-                                        margin: 0 auto;
-                                        max-width: 300px;
-                                    }
-                                    
-                                    @media (min-width: 540px) {
-                                        #globe-iframe-graphic--Boston-2011-2020-2016-06-22-BostonGlobecom-Business-Stories-1 {
-                                            margin-right: 2em;
-                                            float: left;
-                                        }
-                                    }
-                                </style>
-
-                                <!-- (BEGIN) globe graphic iframe -->
-                                <div id='globe-iframe-graphic--Boston-2011-2020-2016-06-22-BostonGlobecom-Business-Stories-1' class='globe-graphic-iframe'></div>
-                                <script src='//apps.bostonglobe.com/common/js/enter-view/enter-view-0.1.0.min.js'></script>
-                                <script src='//apps.bostonglobe.com/common/js/pym/pym-poll.min.js'></script>
-                                <script>
-                                    (function() {
-                                        var getSource = function() {
-
-                                            //========================================
-                                            // Insert path to jpt between quotes below
-                                            //========================================
-                                            var path = '/Boston/Content/Business/WebGraphics/2016/07/08housing/08housing.jpt';
-
-
-
-                                            var test1 = '.jpt';
-                                            var test2 = '/Boston';
-                                            var invalid = path.indexOf(test1, path.length - test1.length) === -1 || path.indexOf(test2) !== 0;
-
-                                            if (invalid) {
-                                                alert('Incorrect path to JPT. Make sure to paste entire path from "/Boston" through ".jpt".');
-                                                return false;
-                                            } else {
-                                                var version = '?v=' + Date.now();
-                                                path = path.substring(0, path.lastIndexOf('/'));
-                                                if (window.location.hostname.indexOf('prdedit') > -1) {
-                                                    return '//prdedit.bostonglobe.com/r' + path + '/index.html' + version;
-                                                } else {
-                                                    var content = 'Content/';
-                                                    var webgraphics = '/WebGraphics/';
-                                                    var left = path.indexOf(content) + content.length;
-                                                    var right = path.indexOf(webgraphics);
-                                                    var section = path.substring(left, right);
-                                                    var end = path.substring(right + webgraphics.length, path.length);
-                                                    return '//c.o0bg.com/rw/Boston/2011-2020/WebGraphics/' + section + '/BostonGlobe.com/' + end + '/index.html' + version;
-                                                }
-                                            }
-                                        };
-
-                                        var pymParent;
-                                        var src = getSource();
-
-                                        if (src) {
-                                            pymParent = new pym.Parent('globe-iframe-graphic--Boston-2011-2020-2016-06-22-BostonGlobecom-Business-Stories-1', src, {});
-                                            pymParent.onMessage('height-request', function(msg) {
-                                                pymParent.sendMessage('height-send', window.innerHeight);
-                                            });
-
-                                            pymParent.onMessage('ready', function() {
-                                                enterView({
-                                                    selector: '#globe-iframe-graphic--Boston-2011-2020-2016-06-22-BostonGlobecom-Business-Stories-1',
-                                                    offset: '25%',
-                                                    trigger: function() {
-                                                        pymParent.sendMessage('enter-view', true);
-                                                    }
-                                                });
-                                            });
-                                        }
-                                    })();
-                                </script>
-                                <!-- (END) globe graphic iframe -->
-
+                                |||ai2html-output|||
                             </div>
                         </p>
                         <p>Some in the industry have been preaching persistence to tired home-shoppers.</p>

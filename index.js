@@ -23,13 +23,15 @@ const argv = require('yargs')
 	.version()
 	.argv
 
+// Convenience logging function.
 const log = (s) =>
 	console.log(chalk.green(s))
 
+// Default gulp task.
 gulp.task('default', function(done) {
 	runSequence(
 		'copy',
-		'html',
+		'build-html',
 		'watch',
 		'serve',
 		done
@@ -60,10 +62,11 @@ gulp.task('copy', function(done) {
 })
 
 // Inject ai2html-output/*.html content into index.html.
-gulp.task('html', function(done) {
+gulp.task('build-html', function(done) {
 
 	log('Building html.')
 
+	// Get contents from the ai2html-output html file (but not index.html).
 	const files = globby.sync([
 			path.join(__dirname, 'temp/*.html'),
 			'!' + path.join(__dirname, 'temp/index.html')
@@ -71,20 +74,10 @@ gulp.task('html', function(done) {
 		.map(v => fs.readFileSync(v, 'utf8'))
 		.join('')
 
+	// Insert above content into index.html.
 	return gulp.src('index.html', { cwd: __dirname })
 		.pipe(replace('|||ai2html-output|||', files))
 		.pipe(gulp.dest('temp', { cwd: __dirname }))
-
-	done()
-
-})
-
-// Run the `html` task, then reload browsersync.
-gulp.task('html-watch', ['html'], function(done) {
-
-	log('Reloading html.')
-
-	bs.reload()
 
 	done()
 
@@ -95,8 +88,17 @@ gulp.task('watch', function() {
 
 	log('Watching files.')
 
+	// If source ai2html-output changes, bring it over.
 	gulp.watch('ai2html-output/*.*', ['copy'])
-	gulp.watch('temp/*.*', { cwd: __dirname }, ['html-watch'])
+
+	// If our ai2html-output html files change, build html.
+	gulp.watch([
+		'temp/*.html',
+		'!temp/index.html',
+	], { cwd: __dirname }, ['build-html'])
+
+	// If our index.html changes, reload browser.
+	gulp.watch('temp/index.html', { cwd: __dirname }).on('change', bs.reload)
 
 })
 

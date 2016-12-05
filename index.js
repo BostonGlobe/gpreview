@@ -4,12 +4,12 @@ const gulp = require('gulp')
 const chalk = require('chalk')
 const bs = require('browser-sync').create()
 const runSequence = require('run-sequence')
-const rename = require('gulp-rename')
 const replace = require('gulp-replace')
-const fs = require('fs')
+const fs = require('fs-extra')
 const url = require('url')
 const proxy = require('proxy-middleware')
-const glob = require('glob-fs')({ gitignore: true })
+const glob = require('glob')
+const path = require('path')
 
 const argv = require('yargs')
 	.usage('Usage: $0 <command>')
@@ -22,8 +22,12 @@ const argv = require('yargs')
 	.version()
 	.argv
 
+const log = (s) =>
+	console.log(chalk.green(s))
+
 gulp.task('default', function(done) {
 	runSequence(
+		'copy',
 		'html',
 		'watch',
 		'serve',
@@ -31,26 +35,55 @@ gulp.task('default', function(done) {
 	)
 })
 
+// Copy files from process.cwd()/ai2html-output to __dirname.
+gulp.task('copy', function(done) {
+
+	log('Copying files.')
+
+	fs.copySync(
+		path.join(process.cwd(), 'ai2html-output'),
+		path.join(__dirname, 'temp/ai2html-output')
+	)
+
+	done()
+
+})
+
+// Inject ai2html-output/*.html content into index.html.
 gulp.task('html', function() {
 
-	const files = glob.readdirSync('ai2html-output/*.html')
+	log('Building html.')
+
+	const files = glob.sync(
+		path.join(__dirname, 'temp/ai2html-output/*.html'))
 		.map(v => fs.readFileSync(v, 'utf8'))
 		.join('')
 
 	return gulp.src('index.html', { cwd: __dirname })
 		.pipe(replace('|||ai2html-output|||', files))
-		.pipe(rename('temp.html'))
-		.pipe(gulp.dest('.', { cwd: __dirname }))
+		.pipe(gulp.dest('temp', { cwd: __dirname }))
 
 })
 
+// Run the `html` task, then reload browsersync.
 gulp.task('html-watch', ['html'], function(done) {
+
+	log('Reloading html.')
+
 	bs.reload()
+
 	done()
+
 })
 
+// Watch files.
 gulp.task('watch', function() {
-	gulp.watch('ai2html-output/*.*', ['html-watch'])
+
+	log('Watching files.')
+
+	gulp.watch('ai2html-output/*.*', ['copy'])
+	gulp.watch('temp/ai2html-output/*.*', { cwd: __dirname }, ['html-watch'])
+
 })
 
 gulp.task('serve', function() {
@@ -69,8 +102,8 @@ gulp.task('serve', function() {
 
 	bs.init({
 		server: {
-			baseDir: __dirname,
-			index: 'temp.html',
+			baseDir: path.join(__dirname, 'temp'),
+			index: 'index.html',
 			middleware: [
 				proxy(cssProxy),
 				proxy(jsProxy),

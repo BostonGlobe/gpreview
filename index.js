@@ -29,13 +29,8 @@ gulp.task('default', function(done) {
 })
 
 gulp.task('html', function() {
-
-	const ai2Html = fs.readFileSync('test.html', 'utf8')
-
-	console.log(ai2Html)
-
 	return gulp.src('index.html', { cwd: __dirname })
-		.pipe(replace('|||gpreview|||', ai2Html))
+		.pipe(replace('|||gpreview|||', fs.readFileSync('test.html', 'utf8')))
 		.pipe(rename('temp.html'))
 		.pipe(gulp.dest('.', { cwd: __dirname }))
 })

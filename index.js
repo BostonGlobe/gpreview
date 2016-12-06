@@ -94,7 +94,7 @@ gulp.task('watch', function() {
 	log('Watching files.')
 
 	// If source ai2html-output changes, bring it over.
-	gulp.watch('ai2html-output/*.*', ['copy'])
+	gulp.watch('ai2html-output/*.html', ['copy'])
 
 	// If our ai2html-output html files change, build html.
 	gulp.watch([

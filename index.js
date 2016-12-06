@@ -43,19 +43,24 @@ gulp.task('copy', function(done) {
 
 	log('Copying ai2html-output html.')
 
-	// If __dirname/temp doesn't exist,
-	if (!shell.test('-e', path.join(__dirname, 'temp'))) {
-
-		// create it.
-		shell.mkdir(path.join(__dirname, 'temp'))
-
-	}
-
-	// Copy ai2html-output contents over.
-	shell.cp(
-		path.join(process.cwd(), 'ai2html-output/*.*'),
+	fs.copySync(
+		path.join(process.cwd(), 'ai2html-output'),
 		path.join(__dirname, 'temp')
 	)
+
+	// // If __dirname/temp doesn't exist,
+	// if (!shell.test('-e', path.join(__dirname, 'temp'))) {
+
+	// 	// create it.
+	// 	shell.mkdir(path.join(__dirname, 'temp'))
+
+	// }
+
+	// // Copy ai2html-output contents over.
+	// shell.cp(
+	// 	path.join(process.cwd(), 'ai2html-output/*.*'),
+	// 	path.join(__dirname, 'temp')
+	// )
 
 	done()
 
